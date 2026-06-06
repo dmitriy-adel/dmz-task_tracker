@@ -53,7 +53,7 @@
 
 Здесь представлена текущая логическая модель бд. При будущих обновлениях она может подвергуться изменениям 
 
-![DB Representation](/imgs/db_representation.png)
+![DB Representation](./imgs/db_representation.png)
 
 Система разделена на несколько модулей: 
 
@@ -66,4 +66,13 @@
 
 Дизайн-проект первой версии представлен на изображении ниже
 
-![Design preview](/imgs/design_preview.jpg)
+![Design preview](./imgs/design_preview.jpg)
+
+## Реализованное
+
+На текущий момент реализованы следующие модули веб-интерфейса: 
+
+1. Странциа регистрации пользователя
+
+
+![Register Page](./imgs/register_page.png)
