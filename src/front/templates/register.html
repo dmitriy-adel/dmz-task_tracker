@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMZ Task Tracker — Вход / Регистрация</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+</head>
+
+<body class="bg-zinc-950 text-zinc-200">
+
+    <div class="min-h-screen flex flex-col lg:flex-row">
+        
+        <div class="lg:w-1/2 bg-[#44944A] flex items-center justify-center p-8 lg:p-12">
+            <div class="max-w-md text-center lg:text-left">
+                <div class="flex justify-center lg:justify-start mb-6">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center">
+                        <span class="text-[#44944A] text-4xl font-bold">DMZ</span>
+                    </div>
+                </div>
+                
+                <h1 class="text-5xl lg:text-6xl font-bold tracking-tight mb-4">
+                    DMZ Task Tracker
+                </h1>
+                
+                <div class="mt-8 text-white/80 text-sm max-w-xs mx-auto lg:mx-0">
+                    Простой и удобный инструмент для управления задачами в команде и лично.
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:w-1/2 flex items-center justify-center p-6 lg:p-12 bg-zinc-900">
+            <div class="w-full max-w-md">
+                
+                <div class="flex border-b border-zinc-700 mb-8">
+                    <button onclick="switchTab('login')" 
+                            class="tab-button flex-1 py-3 text-lg font-medium border-b-2 border-[#44944A] text-white transition-colors" 
+                            id="tab-login">
+                        Вход
+                    </button>
+                    <button onclick="switchTab('register')" 
+                            class="tab-button flex-1 py-3 text-lg font-medium border-b-2 border-zinc-700 text-zinc-400 hover:text-white transition-colors" 
+                            id="tab-register">
+                        Регистрация
+                    </button>
+                </div>
+
+                <form id="login-form" onsubmit="handleLogin(event)" class="auth-form space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium mb-1.5">Email</label>
+                        <input type="email" id="login-email" required
+                               class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 focus:outline-none focus:border-[#44944A]">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1.5">Пароль</label>
+                        <div class="relative">
+                            <input type="password" id="login-password" required
+                                   class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 pr-12 focus:outline-none focus:border-[#44944A]">
+                            <button type="button" onclick="togglePassword('login-password', this)"
+                                    class="absolute right-4 top-3.5 text-zinc-400 hover:text-white">👁</button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-sm">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" class="accent-[#44944A]">
+                            <span>Запомнить меня</span>
+                        </label>
+                        <a href="#" class="text-[#44944A] hover:underline">Забыли пароль?</a>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full bg-[#44944A] hover:bg-[#3a7a3e] transition-colors py-3.5 rounded-2xl font-semibold text-lg mt-2">
+                        Войти
+                    </button>
+                </form>
+
+                <form id="register-form" onsubmit="handleRegister(event)" class="auth-form space-y-5 hidden">
+                    <div>
+                        <label class="block text-sm font-medium mb-1.5">Email</label>
+                        <input type="email" id="reg-email" required
+                               class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 focus:outline-none focus:border-[#44944A]">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-1.5">Имя пользователя</label>
+                        <input type="text" id="reg-username" required
+                               class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 focus:outline-none focus:border-[#44944A]">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1.5">Пароль</label>
+                        <div class="relative">
+                            <input type="password" id="reg-password" required minlength="6"
+                                   class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 pr-12 focus:outline-none focus:border-[#44944A]">
+                            <button type="button" onclick="togglePassword('reg-password', this)"
+                                    class="absolute right-4 top-3.5 text-zinc-400 hover:text-white">👁</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1.5">Повторите пароль</label>
+                        <div class="relative">
+                            <input type="password" id="reg-password2" required minlength="6"
+                                   class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 pr-12 focus:outline-none focus:border-[#44944A]">
+                            <button type="button" onclick="togglePassword('reg-password2', this)"
+                                    class="absolute right-4 top-3.5 text-zinc-400 hover:text-white">👁</button>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full bg-[#44944A] hover:bg-[#3a7a3e] transition-colors py-3.5 rounded-2xl font-semibold text-lg mt-2">
+                        Зарегистрироваться
+                    </button>
+                </form>
+
+                <p class="text-center text-xs text-zinc-500 mt-8">
+                    Тестовый ранний доступ
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/register.js' %}"></script>
+</body>
+</html>
