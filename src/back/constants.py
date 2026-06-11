@@ -12,6 +12,8 @@ VERIFICATION_CODE_EMAIL_HTML: str = '''<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Код подтверждения</title>
 </head>
+
+
 <body style="margin:0; padding:0; background-color:#f4f4f4; font-family: Arial, Helvetica, sans-serif;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f4f4f4;">
         <tr>
@@ -26,7 +28,7 @@ VERIFICATION_CODE_EMAIL_HTML: str = '''<!DOCTYPE html>
                             </h2>
                             
                             <div style="margin: 30px 0;">
-                                <div style="background-color:#4285f4; color:white; font-size:32px; font-weight:700; 
+                                <div style="background-color:#98FB98; color:white; font-size:32px; font-weight:700; 
                                             padding:14px 30px; border-radius:10px; display:inline-block; 
                                             letter-spacing:5px; box-shadow:0 4px 15px rgba(66,133,244,0.3);">
                                     {verification_code_formatted}

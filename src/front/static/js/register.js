@@ -93,7 +93,7 @@ async function handleRegister(e) {
     const password2 = document.getElementById('reg-password2').value;
 
     if (password !== password2) {
-        alert('Пароли не совпадают!');
+        showToast(message='Введенные пароли не совпадают', duration=3000, type='red')
         return;
     }
 
@@ -116,10 +116,11 @@ async function handleRegister(e) {
         } else {
             const errorData = await response.json().catch(() => ({}));
             alert(errorData.detail || 'Не удалось отправить код подтверждения');
+            showToast(message='Не удалось отправить код подтверждения', duration=3000, type='red')
         }
     } catch (error) {
         console.error(error);
-        alert('Ошибка соединения с сервером');
+        showToast(message='Возникла ошибка со стороны сервера', duration=3000, type='red')
 
     } finally {
         submitBtn.disabled = false;
@@ -212,15 +213,17 @@ async function submitVerificationCode() {
 
         if (response.ok && data.status) {
             closeVerificationModal();
-            alert('Регистрация успешно завершена!');
+            showToast(message='Регистрация успешно завершена!', duration=3000, type='green')
             switchTab('login'); 
         } else {
             errorEl.textContent = data.detail || 'Неверный код подтверждения';
             errorEl.classList.remove('hidden');
+            showToast(message='Возникла непредвиденная ошибка', duration=3000, type='red')
         }
     } catch (error) {
         console.error(error);
         errorEl.textContent = 'Ошибка соединения с сервером';
+        showToast(message='Возникла ошибка со стороны сервера', duration=3000, type='red')
         errorEl.classList.remove('hidden');
     } finally {
         confirmBtn.disabled = false;
