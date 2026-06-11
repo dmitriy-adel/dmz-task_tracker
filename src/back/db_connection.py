@@ -46,6 +46,23 @@ class DBConnection:
             print(f"[db_connection.py->get_user_by_id]. Error :: {_ex}")
             raise RuntimeError(status_code=500, detail="DB request error")
         
+    def check_if_user_exists_by_email(self, email: str) -> bool:
+        try:
+            query = f"""
+                SELECT u.id
+                FROM users as u
+                WHERE u.email = '{email}';
+            """
+
+            with self.conn.cursor() as cursor:
+                cursor.execute(query)
+                cursor_fetch = cursor.fetchall()
+                return cursor_fetch
+        
+        except Exception as _ex:
+            print(f"[db_connection.py->check_if_user_exists_by_email]. Error :: {_ex}")
+            raise RuntimeError(status_code=500, detail="DB request error")
+        
     def get_user_pswd(self, user_id: int) -> dict:
         try:
             query = f"""

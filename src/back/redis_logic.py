@@ -115,7 +115,6 @@ class RedisClient:
         if data.get("code") != input_code:
             raise RuntimeError("Wrond VerCode")
         
-        print("код подошел")
         await self.delete_email_vercode(email, redis_client)
         return True
 
