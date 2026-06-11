@@ -36,12 +36,52 @@ function togglePassword(inputId, button) {
     }
 }
 
-function handleLogin(e) {
+async function handleLogin(e) {
     e.preventDefault();
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
 
-    alert(`Вход выполнен!\nEmail: ${email}\n(Позже подключим к бэкенду)`);
+    const emailInput = document.getElementById('login-email');
+    const passwordInput = document.getElementById('login-password');
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+        alert('Пожалуйста, заполните email и пароль');
+        return;
+    }
+
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Вход...';
+
+    try {
+        const response = await fetch('http://127.0.0.1:8001/login_user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',           
+            body: JSON.stringify({
+                user_email: email,
+                user_pswd: password
+            })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (response.ok && data.status === true) {
+            window.location.href = 'http://127.0.0.1:8000/';
+        } else {
+            const errorMsg = data.detail || 'Неверный email или пароль';
+            alert(errorMsg);
+        }
+    } catch (error) {
+        console.error('[handleLogin] Ошибка:', error);
+        alert('Ошибка соединения с сервером');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+    }
 }
 
 async function handleRegister(e) {

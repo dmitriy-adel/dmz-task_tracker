@@ -46,6 +46,26 @@ class DBConnection:
             print(f"[db_connection.py->get_user_by_id]. Error :: {_ex}")
             raise RuntimeError(status_code=500, detail="DB request error")
         
+    def get_user_name_and_email(self, user_id: int) -> dict:
+        try:
+            query = f"""
+                SELECT u.name, u.email
+                FROM users as u
+                WHERE u.id = {user_id};
+            """
+
+            with self.conn.cursor() as cursor:
+                cursor.execute(query)
+                cursor_fetch = cursor.fetchall()
+                res: dict = {"name": cursor_fetch[0][0],
+                            "email": cursor_fetch[0][1]}
+                return res
+        
+        except Exception as _ex:
+            print(f"[db_connection.py->get_user_name_and_email]. Error :: {_ex}")
+            raise RuntimeError(status_code=500, detail="DB request error")
+        
+        
     def check_if_user_exists_by_email(self, email: str) -> bool:
         try:
             query = f"""
@@ -66,7 +86,7 @@ class DBConnection:
     def get_user_pswd(self, user_id: int) -> dict:
         try:
             query = f"""
-                SELECT u.hashed_pswd
+                SELECT u.hash_pswd
                 FROM users as u
                 WHERE u.id = {user_id};
             """
@@ -78,7 +98,26 @@ class DBConnection:
                 return res
         
         except Exception as _ex:
-            print(f"[db_connection.py->get_user_by_id]. Error :: {_ex}")
+            print(f"[db_connection.py->get_user_pswd]. Error :: {_ex}")
+            raise RuntimeError(status_code=500, detail="DB request error")
+        
+    def get_user_pswd_by_email(self, email: str) -> dict:
+        try:
+            query = f"""
+                SELECT u.id, u.hash_pswd
+                FROM users as u
+                WHERE u.email = '{email}';
+            """
+
+            with self.conn.cursor() as cursor:
+                cursor.execute(query)
+                cursor_fetch = cursor.fetchall()
+                res: dict = {"id": cursor_fetch[0][0], 
+                             "pswd": cursor_fetch[0][1]}
+                return res
+        
+        except Exception as _ex:
+            print(f"[db_connection.py->get_user_pswd]. Error :: {_ex}")
             raise RuntimeError(status_code=500, detail="DB request error")
         
     def add_user(self, name: str, email: str, hash_password: str):
@@ -92,5 +131,5 @@ class DBConnection:
                 cursor.execute(query)
 
         except Exception as _ex:
-            print(f"[db_connection.py->create_user]. Error :: {_ex}")
+            print(f"[db_connection.py->add_user]. Error :: {_ex}")
             raise RuntimeError(status_code=500, detail="DB request error")    

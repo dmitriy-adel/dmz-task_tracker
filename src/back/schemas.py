@@ -1,5 +1,4 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional, Dict, Any
 
 class ReqCreateUser(BaseModel):
     user_name: str
@@ -9,3 +8,7 @@ class ReqCreateUser(BaseModel):
 
 class ReqVercode(BaseModel):
     email: EmailStr
+
+class ReqLoginUser(BaseModel):
+    user_email: str
+    user_pswd: str
