@@ -54,45 +54,24 @@ async def get_current_user_id_from_redis(request: Request, redis_client = Depend
 def health() -> dict[str, int]:
     return {"status": 200}
 
-
-@app.post("/add_user")  
-async def add_user(request: ReqCreateUser, redis_client = Depends(get_redis)):
-    try:
-        hashed_pswd: str = tls.hash_password(request.user_pswd)
-        if await rc.verify_email_code(email=request.user_email, input_code=request.verification_code, redis_client=redis_client):
-            dbc.create_user(
-                name=request.user_name,
-                email=request.user_email,
-                hash_password=hashed_pswd,
-            )
-
-            await rc.delete_email_vercode(email=request.user_email, redis_client=redis_client)
-            return {"status": True}
-        
-        return {"status": False}
-    
-    except Exception as _ex:
-        print(f"[app.py->add_user]. Error :: {_ex}")
-        raise HTTPException(status_code=500, detail="Server error")
-    
 @app.post("/send_vercode")  
 async def send_email_with_code(request_body: ReqVercode, redis_client = Depends(get_redis)):
-    email: str = request_body.email.strip().lower()
-    try:
-        code: str = tls.generate_verification_code()
-        await rc.create_email_verification_code(email, code, redis_client)
-        success: bool = es.send_vercode(code=code, to_email=email)
-        
-        if success:
-            print(f"[app.py->send_email_with_code]. Successfuly sended code {code} to {email}")
-            return {"status": True}
-        
-        else:
-            print(f"[app.py->send_email_with_code]. can't send ver. code to {email}")
-            return {"status": False}
-            
-    except Exception as _ex:
-        print(f"[app.py->send_email_with_code]. Error :: {_ex}")
+    email: str = request_body.email.strip().lower()\
+    
+    if dbc.check_if_user_exists_by_email(email=email):
+        print(f"[app.py->send_email_with_code]. user with email {email} already exists")
+        raise HTTPException(status_code=406, detail="user already exists")
+    
+    code: str = tls.generate_verification_code()
+    await rc.create_email_verification_code(email, code, redis_client)
+    success: bool = es.send_vercode(code=code, to_email=email)
+    
+    if success:
+        print(f"[app.py->send_email_with_code]. Successfuly sended code {code} to {email}")
+        return {"status": True}
+    
+    else:
+        print(f"[app.py->send_email_with_code]. can't send ver. code to {email}")
         raise HTTPException(status_code=500, detail="Server error")
     
 @app.post("/check_vercode_and_add_user")  
